@@ -10,6 +10,8 @@ async function selectMediaStream(){
       videoElement.srcObject = mediaStream; 
       videoElement.onloadedmetadata = () =>{
          videoElement.play();
+         //on load of video metadata request for picture in picture
+         videoElement.requestPictureInPicture();
       }
    }
    catch(error){
@@ -19,13 +21,12 @@ async function selectMediaStream(){
 }
 
 button.addEventListener('click', async()=>{
-   //Disable the button 
-   button.disabled = true; 
-   //Start Picture in Picture 
-   await videoElement.requestPictureInPicture(); 
-   //Reset Button 
-   button.disabled = false;  
+   if(button.innerText === "START"){
+      await selectMediaStream(); 
+      button.innerText = "STOP"
+   }
+   else{
+      button.innerText = "START"; 
+      await document.exitPictureInPicture();
+   }
 })
-
-//On load 
-selectMediaStream(); 
